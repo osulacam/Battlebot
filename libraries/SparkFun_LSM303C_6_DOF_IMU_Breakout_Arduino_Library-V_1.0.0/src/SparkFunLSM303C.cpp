@@ -1,6 +1,7 @@
 #include "SparkFunLSM303C.h"
 #include "stdint.h"
 
+
 // Public methods
 status_t LSM303C::begin()
 {
