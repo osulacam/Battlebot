@@ -2,7 +2,7 @@
 #ifndef __SPARKFUN_LSM303C_H__
 #define __SPARKFUN_LSM303C_H__
 
-#include "Wire.h"
+#include "i2c_t3.h"
 #include "SparkFunIMU.h"
 #include "LSM303CTypes.h"
 #include "DebugMacros.h"
@@ -10,7 +10,7 @@
 #define SENSITIVITY_ACC   0.06103515625   // LSB/mg
 #define SENSITIVITY_MAG   0.00048828125   // LSB/Ga
 
-#define DEBUG 1 // Change to 1 (nonzero) to enable debug messages
+#define DEBUG 0 // Change to 1 (nonzero) to enable debug messages
 
 // Define a few error messages to save on space
 static const char AERROR[] = "\nAccel Error";
@@ -22,14 +22,14 @@ static const char MERROR[] = "\nMag Error";
 //  D12 -> CS_XL
 //  D13 -> CS_MAG
 #define CSPORT_MAG PORTB
-#define CSBIT_MAG  5
+#define CSBIT_MAG  12
 #define CSPORT_XL  PORTB
-#define CSBIT_XL   4
+#define CSBIT_XL   11
 #define CLKPORT    PORTB
-#define CLKBIT     3
+#define CLKBIT     10
 #define DATAPORTI  PINB
 #define DATAPORTO  PORTB
-#define DATABIT    2
+#define DATABIT    9
 #define DIR_REG    DDRB
 // End SPI pin definitions
 
@@ -59,7 +59,7 @@ class LSM303C : public SparkFunIMU
 
     // The LSM303C functions over both I2C or SPI. This library supports both.
     // Interface mode used must be set!
-    InterfaceMode_t interfaceMode = MODE_I2C;  // Set a default...
+    InterfaceMode_t interfaceMode = MODE_SPI;  // Set a default...
 
     // Hardware abstraction functions (Pro Mini)
     uint8_t  SPI_ReadByte(CHIP_t, uint8_t);
