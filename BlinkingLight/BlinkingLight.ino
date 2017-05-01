@@ -2,9 +2,9 @@
 #include <Controller.h>
 #include <PID.h>
 
-#define kp 1
+#define kp 20
 #define ki 0
-#define kd 0
+#define kd 0.1
 
 #define LED1 4
 #define LED2 13
@@ -29,8 +29,8 @@ volatile int RV = 0;
 void setup() {
 
   Gyro gyro(A22,A4);
-  PID pidr(kp, ki, kd, 2, 1);
-  PID pidl(kp, ki, kd, 3, -1);
+  PID pidr(kp, ki, kd, 2, 1, 84); // 84 center
+  PID pidl(kp, ki, kd, 3, -1, 84);
   Controller controller(pidr, pidl);
   
   pinMode(LED1, OUTPUT);
@@ -49,27 +49,28 @@ void setup() {
   attachInterrupt(ISR6, ISR6RH, CHANGE);
 
   while(1){
-    while(RT<10){
-      delay(10);
+    while(RT<10 || micros() - lastMicros > 12000){
+      Serial.printf("%d\n",micros() - lastMicros);
       pidr.stop();
       pidl.stop();
+      delay(10);
     }
-    gyro.updateAngle();
+    gyro.updateAngle((LT-500)*0.1 + 455);
     double angle = gyro.getAngle();
 
     //Serial.printf("%d\t%d\t%d\t%d\t%d\t%d\t\n",LT,RT,LV,LH,RV,RH);
-    double vScale = sqrt(RV*RV+RH*RH);
-    double rotS = LV * 1.0;
-    double targetDir = atan2(-RH,RV);
+    double vScale = sqrt(RV*RV+RH*RH)*3;
+    double rotS = LV * 0.1;
+    double targetDir = atan2(RV,-RH);
     double angleAdjust = angle - targetDir;
   
     controller.update(rotS, vScale,gyro.getVel(), angleAdjust);
     
-  
-    Serial.printf("%f\t%f\t%f\t%f\t%f\n",rotS, targetDir, vScale, angleAdjust, analogRead(A2));
+    Serial.printf("%f\t%f\n",gyro.getVel(),rotS);
+    //Serial.printf("%f\t%f\t%f\t%f\t%f\n",rotS, targetDir, vScale, angleAdjust, analogRead(A2));
 
   
-    if(angle < 10 && angle > 0){
+    if(abs(angle) < 3.14/4){
       digitalWrite(LED1, HIGH);
     } else {
       digitalWrite(LED1, LOW);

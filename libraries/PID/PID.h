@@ -1,6 +1,6 @@
 #pragma once
 
-#include <PWMServo.h>
+#include <PWMServoFast.h>
 #include <TimerOne.h> 
 
 class PID{
@@ -14,9 +14,10 @@ class PID{
 		int dir;
 		PWMServo servo;
 		double motorPow;
+		int center;
 
 	public:
-		PID(double kp, double ki, double kd, int pin, int dir);
+		PID(double kp, double ki, double kd, int pin, int dir, int center);
 		PID();
 		void setVel(double vel);
 		void setFF(double feedForward);

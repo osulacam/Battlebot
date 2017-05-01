@@ -30,11 +30,11 @@ double Gyro::getVel(){
 }
 
 double Gyro::degToRad(double degToRad){
-	return degToRad * (3.14159 / 180.0);;
+	return degToRad * ((3.14159 * 2) / this->lastSize);;
 }
 
 
-void Gyro::updateAngle(){
+void Gyro::updateAngle(int circleSize){
 	//double temp = (((analogRead(tempPort) * 5/65536.0)-2.46)*111.11)+25;
 	long curMicros = micros(); //analogRead takes about 100 microseconds
     long interval = curMicros - lastMicros;
@@ -47,12 +47,13 @@ void Gyro::updateAngle(){
 
     this->gyroVel = filter;
     gyroAngle += ((filter)*(double)interval)/1000000.0;
-    while(gyroAngle < 0) gyroAngle += 360;
-    gyroAngle = fmod(gyroAngle, 360);
-    	if(gyroAngle > 180){
-		gyroAngle = gyroAngle - 360;
+    while(gyroAngle < 0) gyroAngle += circleSize;
+    gyroAngle = fmod(gyroAngle, circleSize);
+    	if(gyroAngle > circleSize/2){
+		gyroAngle = gyroAngle - circleSize;
 	}
+	this->lastSize = circleSize;
 	
-    Serial.printf("%f \t%f \t %d \t %f\n", vel, filter, interval, gyroAngle);
+    //Serial.printf("%f \t%f \t %d \t %f\n", vel, filter, interval, gyroAngle);
 
 }

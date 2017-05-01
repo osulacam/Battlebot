@@ -9,19 +9,11 @@ void setup() {
   servo1.attach(2);
   servo2.attach(3);
 
-  servo1.write(90);
-  servo2.write(90);
+  servo2.write(50);
 
-  delay(1000);
+  delay(10000);
 
-  servo1.write(97);
-  servo2.write(97);
-
-  delay(3000);
-
-  servo1.write(90);
-  servo2.write(90);
-  
+   //servo2.write(82);
 }
 
 void loop() {

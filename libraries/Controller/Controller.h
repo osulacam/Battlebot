@@ -2,10 +2,6 @@
 #include <PID.h>
 #include <TimerOne.h> 
 
-#define kp 1
-#define ki 0
-#define kd 0
-
 class Controller {
 	private:
 		double rVel;

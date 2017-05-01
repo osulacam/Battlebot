@@ -12,6 +12,7 @@ class Gyro {
 		int gyroPort;
 		int tempPort;
 		long lastMicros;
+		int lastSize;
 		double degToRad(double deg); //j82C
 
 	public:
@@ -19,6 +20,6 @@ class Gyro {
 		void calibrate(long time);
 		double getAngle();
 		double getVel();
-		void updateAngle();
+		void updateAngle(int circleSize);
 
 };
